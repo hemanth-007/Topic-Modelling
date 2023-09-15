@@ -29,12 +29,12 @@ def main(experiment_name, meta_seed, num_seeds):
 
     search_dict = {
         # constant
-        'num_gpus': [1],
-        'num_cpus': [0],
+        'num_gpus': [0],
+        'num_cpus': [1],
         'max_epochs': [10],
         'frozen_embeddings': [True],
         # data
-        'data_set': ['data/pickles/20newsgroups_mwl3'],
+        'data_set': ['data/pickles/safety_description'],
         'vocab_size': [2000],
         'input_type': ['bert'],  # bow, bert
         'embedding_dict': [
@@ -46,7 +46,7 @@ def main(experiment_name, meta_seed, num_seeds):
             }
         ],
         # model
-        'num_topics': [20],
+        'num_topics': [4],
         'inference_dropout': [0.2],
         'theta_dropout': [0.0],
         'hidden_layers': [(128, 128)],
@@ -84,7 +84,6 @@ def main(experiment_name, meta_seed, num_seeds):
         print(f'\nExperiment {exp_num}:')
 
         hp_dict = dict(zip(keys, curr_vals))
-
         full_exp_num = get_save_num(exp_num)
         true_experiment_name = f'{experiment_name}/{full_exp_num}'
         init_seed_folder(true_experiment_name, hp_dict)
@@ -132,7 +131,7 @@ def main(experiment_name, meta_seed, num_seeds):
                                   test_dataset=test_dataset,
                                   train_config=train_config)
 
-                trainer.distributed_train()
+                trainer.train(0)
 
                 # haven't tested plotting for multi-gpu training
                 # haven't tested anything for multi-machine training
@@ -158,7 +157,6 @@ if __name__ == '__main__':
     my_parser.add_argument('experiment_name', type=str, help='Name to save the experiment as in the experiments folder.')
     my_parser.add_argument('num_seeds', type=int, help='How many seeds to run for each hyperparameter combination.')
     my_parser.add_argument('--meta_seed', type=int, default=None, help='Experiment meta seed.')
-
     args = my_parser.parse_args()
 
     main(args.experiment_name, args.meta_seed, args.num_seeds)

@@ -20,8 +20,7 @@ topics = get_topic_words_from_files(pickle_name, experiment_name, topk)
 if args.print_topics:
     for topic in topics:
         print(f'{topic}\n')
-
-with open('evals/figures/topics.txt', 'w') as f:
+with open(f'evals/figures/topics_{experiment_name.split("/",2)[1]}.txt', 'w') as f:
     for i, topic in enumerate(topics):
         for j, word in enumerate(topic):
             if j == 0:

@@ -160,18 +160,18 @@ cython_debug/
 #.idea/
 
 # CUSTOM
-/data/pickles/*.pkl
+#/data/pickles/*.pkl
 /data/raw/texts/*.txt
 /data/raw/clntm/scholar_data.tar.gz
 /data/raw/clntm/scholar_data
 /data/raw/nyt/nyt_corpus_LDC2008T19.tgz
 /data/raw/nyt/nyt_corpus
 /data/raw/nyt/nyt_output.txt
-/evals/figures/*
+#/evals/figures/*
 !/evals/figures/.gitkeep
 /evals/gensim-data/word2vec-google-news-300
 /evals/ntm_runs/*.pkl
-/experiments/*
+#/experiments/*
 !/experiments/.gitkeep
-/model/ckpt/*.ckpt
-scratch.py
+/model/ckpt/*.ckpt 
+

@@ -1,0 +1,2 @@
+experiment_num	best_epoch	train_loss	train_perplexity	train_coherence	train_diversity
+0	8.799999999999999	262.2392272949219	1307.2482238769533	0.03631702254174029	0.9765

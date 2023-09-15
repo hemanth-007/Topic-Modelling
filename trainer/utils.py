@@ -97,9 +97,9 @@ class ExperimentTrainConfig:
         # distributed data parallel
         self.master_address = 'localhost'
         self.master_port = '12355'  # add option to change this in run_experiments
-        self.backend = 'nccl'
+        self.backend = 'gloo'
         self.world_size = d['num_gpus']
-        self.torch_distributed_debug = 'OFF'
+        self.torch_distributed_debug = 'ON'
         self.find_unused_parameters = False
         # optimizer
         self.learning_rate = d['learning_rate']

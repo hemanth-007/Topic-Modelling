@@ -56,14 +56,16 @@ class Trainer:
 
     def train(self, rank):
         # pull model and train_config from class
+        # breakpoint()
         model, train_config = self.model, self.train_config
+        # dist.init_process_group(backend='gloo')
         # mixed precision training
-        scaler = GradScaler()
+        # scaler = GradScaler()
         # distributed data parallel
-        self.setup(rank)
-        model = model.to(rank)
+        # self.setup(rank)
+        # model = model.to(rank)
         # set find unused parameters in train config
-        model = DDP(model, device_ids=[rank], find_unused_parameters=train_config.find_unused_parameters)
+        # model = DDP(model, device_ids=[rank], find_unused_parameters=train_config.find_unused_parameters)
 
         raw_model = model.module if hasattr(model, "module") else model
         optimizer = raw_model.configure_optimizers(train_config)
@@ -75,7 +77,7 @@ class Trainer:
             model.train(is_train)
             data = self.train_dataset if is_train else self.test_dataset
 
-            distributed_sampler = DistributedSampler(data, shuffle=is_train)
+            # distributed_sampler = DistributedSampler(data, shuffle=is_train)
 
             if train_config.deterministic_dataloader:
                 def seed_worker(worker_id):
@@ -96,7 +98,7 @@ class Trainer:
                                 num_workers=train_config.num_workers,
                                 worker_init_fn=worker_init_fn,
                                 generator=generator,
-                                sampler=distributed_sampler)
+                                )
 
             losses = []
             pbar = tqdm(enumerate(loader), total=len(loader)) if (is_train and rank == 0) else enumerate(loader)
@@ -110,12 +112,15 @@ class Trainer:
 
                 if is_train:
                     model.zero_grad()
-                    scaler.scale(loss).backward()
+                    loss.backward()
+                    #scaler.scale(loss).backward()
+
                     if train_config.grad_norm_clip is not None:
-                        scaler.unscale_(optimizer)
+                       # scaler.unscale_(optimizer)
                         torch.nn.utils.clip_grad_norm_(model.parameters(), train_config.grad_norm_clip)
-                    scaler.step(optimizer)
-                    scaler.update()
+                    #scaler.step(optimizer)
+                    optimizer.step()
+                    #scaler.update()
 
                     # report progress
                     if rank == 0:
@@ -157,4 +162,4 @@ class Trainer:
                                   train_config.experiment_num,
                                   self.outputs)
 
-        self.cleanup()
+        # self.cleanup()

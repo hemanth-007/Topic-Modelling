@@ -13,8 +13,8 @@ from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import CountVectorizer
 
 from torch import FloatTensor
-from torch.utils.data.dataset import MapDataPipe
-
+# from torch.utils.data.dataset import MapDataPipe
+from torchdata.datapipes.map import MapDataPipe
 
 def main(dataset, function_dict, min_word_length, custom_data_dict):
     try:
@@ -31,7 +31,7 @@ def main(dataset, function_dict, min_word_length, custom_data_dict):
 
 
 def custom_data(min_word_length, custom_data_dict):
-    create_dataset = CreateDataset(data_type=custom_data_dict['data_type'],
+    create_dataset = CreateDataset(data_type="text",
                                    train_file=custom_data_dict['train_file'],
                                    test_file=custom_data_dict['test_file'],
                                    save_name=custom_data_dict['save_name'],
@@ -577,7 +577,7 @@ if __name__ == '__main__':
             'max_df': args.max_df,
             'min_df': args.min_df,
             'remove_numbers': not args.keep_numbers,
-            'batch_size': args.batch_sze
+            'batch_size': args.batch_size
         }
     else:
         custom_data_dict = None
